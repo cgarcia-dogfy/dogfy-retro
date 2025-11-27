@@ -1,8 +1,20 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 
+interface Categoria {
+  id: string
+  nombre: string
+  color: string
+  colorHover: string
+  colorBorder: string
+  colorText: string
+  colorBg: string
+  icon: string
+  preguntas: string[]
+}
+
 // Definición de categorías con sus preguntas
-const categorias = [
+const categorias: Categoria[] = [
   {
     id: 'rojo',
     nombre: 'Trabajo / Profesión',
@@ -107,10 +119,10 @@ const categorias = [
   }
 ]
 
-const categoriaSeleccionada = ref(null)
-const preguntasDisponibles = ref([])
-const preguntaMostrada = ref('')
-const isGenerating = ref(false)
+const categoriaSeleccionada = ref<Categoria | null>(null)
+const preguntasDisponibles = ref<string[]>([])
+const preguntaMostrada = ref<string>('')
+const isGenerating = ref<boolean>(false)
 
 // Preguntas actuales según categoría seleccionada
 const preguntasActuales = computed(() => {
@@ -119,7 +131,7 @@ const preguntasActuales = computed(() => {
 })
 
 // Seleccionar categoría
-const seleccionarCategoria = (categoria) => {
+const seleccionarCategoria = (categoria: Categoria) => {
   categoriaSeleccionada.value = categoria
   preguntasDisponibles.value = [...categoria.preguntas]
   preguntaMostrada.value = ''
@@ -142,7 +154,7 @@ const generarPregunta = () => {
   
   const rotacion = setInterval(() => {
     const indexAleatorio = Math.floor(Math.random() * preguntasActuales.value.length)
-    preguntaMostrada.value = preguntasActuales.value[indexAleatorio]
+    preguntaMostrada.value = preguntasActuales.value[indexAleatorio]!
     contador++
     
     if (contador >= maxIteraciones) {
@@ -150,7 +162,7 @@ const generarPregunta = () => {
       
       // Seleccionar pregunta final del pool disponible
       const indexFinal = Math.floor(Math.random() * preguntasDisponibles.value.length)
-      preguntaMostrada.value = preguntasDisponibles.value[indexFinal]
+      preguntaMostrada.value = preguntasDisponibles.value[indexFinal]!
       
       // Eliminar la pregunta seleccionada del pool
       preguntasDisponibles.value.splice(indexFinal, 1)
@@ -160,7 +172,7 @@ const generarPregunta = () => {
   }, intervalo)
 }
 
-const handleKeyPress = (event) => {
+const handleKeyPress = (event: KeyboardEvent) => {
   if (event.key === 'Enter' && !isGenerating.value && categoriaSeleccionada.value) {
     generarPregunta()
   }

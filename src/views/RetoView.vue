@@ -1,7 +1,13 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 
-const retosOriginales = [
+interface Reto {
+  emoji: string
+  text: string
+  dificultad: 'Baja' | 'Media' | 'Alta'
+}
+
+const retosOriginales: Reto[] = [
   { emoji: '🎤', text: 'Canta 20 segundos de tu canción favorita', dificultad: 'Media' },
   { emoji: '😂', text: 'Cuenta el chiste más malo que conozcas', dificultad: 'Baja' },
   { emoji: '🎭', text: 'Imita a un compañero del equipo (sin decir quién)', dificultad: 'Media' },
@@ -24,9 +30,9 @@ const retosOriginales = [
   { emoji: '🙌', text: 'Di 5 cumplidos a tus compañeros en 20 segundos', dificultad: 'Baja' }
 ]
 
-const retosDisponibles = ref([...retosOriginales])
-const retoMostrado = ref(null)
-const isGenerating = ref(false)
+const retosDisponibles = ref<Reto[]>([...retosOriginales])
+const retoMostrado = ref<Reto | null>(null)
+const isGenerating = ref<boolean>(false)
 
 const generarReto = () => {
   if (isGenerating.value) return
@@ -45,7 +51,7 @@ const generarReto = () => {
   
   const rotacion = setInterval(() => {
     const indexAleatorio = Math.floor(Math.random() * retosOriginales.length)
-    retoMostrado.value = retosOriginales[indexAleatorio]
+    retoMostrado.value = retosOriginales[indexAleatorio]!
     contador++
     
     if (contador >= maxIteraciones) {
@@ -53,7 +59,7 @@ const generarReto = () => {
       
       // Seleccionar reto final del pool disponible
       const indexFinal = Math.floor(Math.random() * retosDisponibles.value.length)
-      retoMostrado.value = retosDisponibles.value[indexFinal]
+      retoMostrado.value = retosDisponibles.value[indexFinal]!
       
       // Eliminar el reto seleccionado del pool
       retosDisponibles.value.splice(indexFinal, 1)
@@ -63,7 +69,7 @@ const generarReto = () => {
   }, intervalo)
 }
 
-const handleKeyPress = (event) => {
+const handleKeyPress = (event: KeyboardEvent) => {
   if (event.key === 'Enter' && !isGenerating.value) {
     generarReto()
   }
@@ -77,7 +83,7 @@ onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyPress)
 })
 
-const getDificultadColor = (dificultad) => {
+const getDificultadColor = (dificultad: Reto['dificultad']) => {
   switch(dificultad) {
     case 'Baja':
       return 'bg-green-100 text-green-800 border-green-200'

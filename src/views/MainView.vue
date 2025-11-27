@@ -1,9 +1,9 @@
-<script setup>
+<script setup lang="ts">
 import { RouterView, useRoute } from 'vue-router'
 import { ref, watch } from 'vue'
 
 const route = useRoute()
-const activeTab = ref(route.name || 'pregunta')
+const activeTab = ref<string | symbol | null | undefined>(route.name || 'pregunta')
 
 watch(() => route.name, (newName) => {
   if (newName) {
