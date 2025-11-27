@@ -4,7 +4,7 @@ import { ref, computed } from 'vue'
 // Lista de personas hardcoded
 const personas = [
   'Marc Forn', 'Nahuel', 'Mihail', 'Marc Serra', 'Sergio', 'Marc Postils', 'Antonio', 'Carlos', 
-  'Juanjo', 'Adri', 'Unai', 'Ges', 'Xavi', 'Pau', 'Natalia', 'Dani'
+  'Juanjo', 'Adri', 'Unai', 'Ges', 'Xavi', 'Pau', 'Natalia', 'Dani', 'Claudia', 'Alba', 'Laura', 'Oriol'
 ]
 
 const personasPorGrupo = ref(5)
